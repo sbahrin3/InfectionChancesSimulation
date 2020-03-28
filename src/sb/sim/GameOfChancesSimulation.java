@@ -102,7 +102,7 @@ public class GameOfChancesSimulation {
 			
 			//Kill all organismes in this population
 			population.getOrganismes().stream().forEach(organisme->{
-				organisme.setLife(null);
+				organisme.killMe();
 			});
 			System.out.println();
 			
