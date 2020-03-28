@@ -17,6 +17,14 @@ public class Organisme implements Runnable {
 		life = new Thread(this);
 		life.start();
 	}
+	
+	public static Organisme birth(long id) {
+		return new Organisme(id);
+	}
+	
+	public void killMe() {
+		this.life = null;
+	}
 
 	@Override
 	public void run() {

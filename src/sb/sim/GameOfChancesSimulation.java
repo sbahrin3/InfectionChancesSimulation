@@ -15,10 +15,8 @@ public class GameOfChancesSimulation {
 		population.setChancesToBeHealed(50);
 		
 		for ( long i = 0; i < initialSize; i++ ) {
-			population.addOrganisme(new Organisme(i));
+			population.addOrganisme(Organisme.birth(i));
 		}
-		
-
 		
 		Thread inspectThread = new Thread(new Inspect(population));
 		inspectThread.start();
@@ -30,7 +28,6 @@ public class GameOfChancesSimulation {
 	
 	static class Inspect implements Runnable {
 		
-		boolean isRunning = true;
 		Population population;
 		Random r = new Random();
 		long min = 0;
@@ -43,7 +40,6 @@ public class GameOfChancesSimulation {
 		@Override
 		public void run() {
 			
-			boolean shouldStop = false;
 			long countHealthy = 0;
 			long countInfected = 0;
 			long countHealed = 0;
@@ -62,7 +58,7 @@ public class GameOfChancesSimulation {
 			int days = 0;
 			
 			System.out.print("Day " + days + ":   ");
-			while ( isRunning ) {
+			while ( days < totalDays ) {
 				try {
 					Thread.sleep(1);
 					
@@ -91,16 +87,11 @@ public class GameOfChancesSimulation {
 						System.out.print("Day " + days + ": ");
 						if ( days < 10 ) System.out.print("  ");
 						else if ( days > 9 && days < 100 ) System.out.print(" ");
-						
-						shouldStop = countInfected > 0;
-						
+												
 						countHealthy = 0;
 						countInfected = 0;
 						countHealed = 0;
-						
-						if ( days > totalDays ) {
-							isRunning = false;
-						}
+												
 					}
 					
 					
@@ -109,7 +100,7 @@ public class GameOfChancesSimulation {
 				}
 			}
 			
-			
+			//Kill all organismes in this population
 			population.getOrganismes().stream().forEach(organisme->{
 				organisme.setLife(null);
 			});
